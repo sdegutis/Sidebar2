@@ -38,18 +38,25 @@ setInterval(updateFeastDay, 1000 * 60 * 60 * 5);
 const params = new URLSearchParams(location.search);
 const apiKey = params.get('openWeather_apikey');
 const weatherQuery = params.get('openWeather_query');
-const url = `https://api.openweathermap.org/data/2.5/weather?${weatherQuery}&appid=${apiKey}&units=imperial`;
+const url = `https://api.openweathermap.org/data/2.5/onecall?appid=${apiKey}&${weatherQuery}&exclude=minutely,daily&units=imperial`;
 const weatherIconEl = document.getElementById('weather-icon');
 const temperatureEl = document.getElementById('temperature');
 const weatherGlimpseEl = document.getElementById('weather-glimpse');
 const weatherFullEl = document.getElementById('weather-full');
 function updateWeather() {
   fetch(url).then(res => res.json()).then(json => {
-    weatherIconEl.src = `http://openweathermap.org/img/wn/${json.weather[0].icon}@2x.png`;
-    temperatureEl.innerText = `${Math.round(json.main.temp)} Fº`;
-    weatherGlimpseEl.innerText = json.weather[0].main;
-    weatherFullEl.innerText = json.weather[0].description;
+    weatherIconEl.src = `http://openweathermap.org/img/wn/${json.current.weather[0].icon}@2x.png`;
+    temperatureEl.innerText = `${Math.round(json.current.feels_like)} Fº`;
+    weatherGlimpseEl.innerText = json.current.weather[0].main;
+    weatherFullEl.innerText = makeDescription(json.hourly);
+    // TODO: handle alerts
+    // json.alerts may or may not exist
+    // If it does, it looks like:
+    // https://openweathermap.org/api/one-call-api#hist_parameter (sample above it)
   });
 }
 updateWeather();
 setInterval(updateWeather, 1000 * 60 * 10 /* 10 minutes */);
+function makeDescription(list) {
+  return list.slice(0, 12).map(item => item.weather[0].main).join(', ');
+}
