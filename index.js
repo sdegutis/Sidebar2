@@ -18,6 +18,15 @@ function updateTime() {
   dateEl.innerText = dateFormatter.format(now);
   dayEl.innerText = dayFormatter.format(now);
 }
-
 updateTime();
 setInterval(updateTime, 30_000);
+
+const feastDayEl = document.getElementById('feastday');
+const calendar = Romcal.Calendar.calendarFor({ country: 'unitedStates' });
+function updateFeastDay() {
+  const today = new Date().toISOString().split('T')[0];
+  const feastDay = calendar.find(day => day.moment.split('T')[0] === today);
+  feastDayEl.innerText = feastDay.name;
+}
+updateFeastDay();
+setInterval(updateFeastDay, 1000 * 60 * 60 * 5);
