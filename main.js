@@ -1,5 +1,5 @@
 const electron = require('electron');
-require('dotenv').config();
+require('dotenv').config({ path: 'electron-builder.env' });
 
 electron.app.whenReady().then(() => {
 
