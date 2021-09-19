@@ -47,4 +47,26 @@
 }
 
 #bottom #info {
+  background-color: #0007;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0.75em;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+#bottom #info #feastday {
+  grid-column: 1 / 3;
+  text-align: center;
+}
+
+#time, #temperature {
+  font-size: 200%;
+}
+
+#date {
+  font-size: 150%;
 }
