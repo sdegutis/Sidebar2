@@ -58,5 +58,19 @@ function updateWeather() {
 updateWeather();
 setInterval(updateWeather, 1000 * 60 * 10 /* 10 minutes */);
 function makeDescription(list) {
-  return list.slice(0, 12).map(item => item.weather[0].main).join(', ');
+  list = list.slice(0, 12).map(item => item.weather[0].description);
+  list.push(null);
+  let count = 0;
+  let current = null;
+  const overall = [];
+  for (const item of list) {
+    if (item !== current) {
+      const hours = count > 1 ? 'hours' : 'hour';
+      overall.push(`${count} ${hours} of ${current}`);
+      current = item;
+      count = 0;
+    }
+    count++;
+  }
+  return overall.slice(1).join(', ');
 }
