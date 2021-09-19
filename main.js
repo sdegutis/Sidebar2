@@ -1,4 +1,5 @@
 const electron = require('electron');
+require('dotenv').config();
 
 electron.app.whenReady().then(() => {
 
@@ -7,6 +8,11 @@ electron.app.whenReady().then(() => {
     height: 600,
   });
 
-  win.loadFile('./index.html');
+  win.loadFile('./index.html', {
+    query: {
+      openWeather_apikey: process.env.OPENWEATHER_APIKEY,
+      openWeather_query: process.env.OPENWEATHER_QUERY,
+    }
+  });
 
 });
