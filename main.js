@@ -14,5 +14,6 @@ electron.app.whenReady().then(() => {
       openWeather_query: process.env.OPENWEATHER_QUERY,
     }
   });
+  win.setMenu(null);
 
 });
