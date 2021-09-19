@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "build": {
-    "productName": "Sidebar"
+    "productName": "Sidebar",
+    "icon": "app.ico"
   },
   "devDependencies": {
     "electron": "^14.0.1",
