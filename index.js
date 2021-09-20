@@ -38,17 +38,22 @@ setInterval(updateFeastDay, 1000 * 60 * 60 * 5);
 const params = new URLSearchParams(location.search);
 const apiKey = params.get('openWeather_apikey');
 const weatherQuery = params.get('openWeather_query');
-const url = `https://api.openweathermap.org/data/2.5/onecall?appid=${apiKey}&${weatherQuery}&exclude=minutely,daily&units=imperial`;
+const url = `https://api.openweathermap.org/data/2.5/onecall?appid=${apiKey}&${weatherQuery}&exclude=minutely&units=imperial`;
 const weatherIconEl = document.getElementById('weather-icon');
 const temperatureEl = document.getElementById('temperature');
-const weatherGlimpseEl = document.getElementById('weather-glimpse');
+const weatherGlimpseDescEl = document.getElementById('weather-glimpse-desc');
+const weatherGlimpseMinEl = document.getElementById('weather-glimpse-min');
+const weatherGlimpseMaxEl = document.getElementById('weather-glimpse-max');
 const weatherFullEl = document.getElementById('weather-full');
 const hourFormatter = new Intl.DateTimeFormat('en', { hour12: true, hour: 'numeric' });
 function updateWeather() {
   fetch(url).then(res => res.json()).then(json => {
     weatherIconEl.src = `http://openweathermap.org/img/wn/${json.current.weather[0].icon}@2x.png`;
+    const temps = Object.values(json.daily[0].feels_like);
     temperatureEl.innerText = `${Math.round(json.current.feels_like)} Fº`;
-    weatherGlimpseEl.innerText = json.current.weather[0].main;
+    weatherGlimpseDescEl.innerText = json.current.weather[0].main;
+    weatherGlimpseMaxEl.innerText = `High: ${Math.round(Math.max(...temps))}`;
+    weatherGlimpseMinEl.innerText = `Low:  ${Math.round(Math.min(...temps))}`;
     weatherFullEl.innerText = makeDescription(json.hourly);
     // TODO: handle alerts
     // json.alerts may or may not exist
@@ -57,7 +62,7 @@ function updateWeather() {
   });
 }
 updateWeather();
-setInterval(updateWeather, 1000 * 60 * 10 /* 10 minutes */);
+setInterval(updateWeather, 1000 * 60 * 3 /* 3 minutes */);
 function makeDescription(list) {
   list = list.slice(0, 12).map(item => item.weather[0].description);
   list.push(null);
