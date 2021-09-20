@@ -43,6 +43,7 @@ const weatherIconEl = document.getElementById('weather-icon');
 const temperatureEl = document.getElementById('temperature');
 const weatherGlimpseEl = document.getElementById('weather-glimpse');
 const weatherFullEl = document.getElementById('weather-full');
+const hourFormatter = new Intl.DateTimeFormat('en', { hour12: true, hour: 'numeric' });
 function updateWeather() {
   fetch(url).then(res => res.json()).then(json => {
     weatherIconEl.src = `http://openweathermap.org/img/wn/${json.current.weather[0].icon}@2x.png`;
@@ -60,14 +61,28 @@ setInterval(updateWeather, 1000 * 60 * 10 /* 10 minutes */);
 function makeDescription(list) {
   list = list.slice(0, 12).map(item => item.weather[0].description);
   list.push(null);
+  let hour = 0;
   let count = 0;
-  let current = null;
+  let current = '';
   const overall = [];
   for (const item of list) {
     if (item !== current) {
-      const hours = count > 1 ? 'hours' : 'hour';
-      overall.push(`${count} ${hours} of ${current}`);
+      let desc;
+      if (current.match(/rain|snow|storm/i)) {
+        const now = new Date();
+        now.setHours(now.getHours() + hour);
+        const start = hourFormatter.format(now);
+        now.setHours(now.getHours() + count);
+        const end = hourFormatter.format(now);
+        desc = `${current} from ${start} to ${end}`;
+      }
+      else {
+        const hours = count > 1 ? 'hours' : 'hour';
+        desc = `${count} ${hours} of ${current}`;
+      }
+      overall.push(desc);
       current = item;
+      hour += count;
       count = 0;
     }
     count++;
