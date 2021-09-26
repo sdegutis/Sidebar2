@@ -49,7 +49,7 @@ const hourFormatter = new Intl.DateTimeFormat('en', { hour12: true, hour: 'numer
 function updateWeather() {
   fetch(url).then(res => res.json()).then(json => {
     weatherIconEl.src = `http://openweathermap.org/img/wn/${json.current.weather[0].icon}@2x.png`;
-    const temps = Object.values(json.daily[0].feels_like);
+    const temps = Object.values(json.daily[1].feels_like);
     temperatureEl.innerText = `${Math.round(json.current.feels_like)} Fº`;
     weatherGlimpseDescEl.innerText = json.current.weather[0].main;
     weatherGlimpseMaxEl.innerText = `High: ${Math.round(Math.max(...temps))}`;
