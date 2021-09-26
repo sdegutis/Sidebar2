@@ -1,7 +1,9 @@
 const electron = require('electron');
-require('dotenv').config({ path: 'electron-builder.env' });
+const path = require('path');
 
 electron.app.whenReady().then(() => {
+
+  require('dotenv').config({ path: path.join(__dirname, '.env') });
 
   const win = new electron.BrowserWindow({
     width: 300,
@@ -14,6 +16,7 @@ electron.app.whenReady().then(() => {
       openWeather_query: process.env.OPENWEATHER_QUERY,
     }
   });
+  // win.webContents.toggleDevTools();
   win.setMenu(null);
 
 });
