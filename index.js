@@ -85,3 +85,23 @@ function makeDescription(list) {
   }
   return overall.slice(1).join(', ');
 }
+
+function makelive(/** @type {Event} */ e) {
+  const link = /** @type {HTMLAnchorElement} */(e.target);
+  document.getElementById('top').innerHTML = `
+    <iframe name="ifr"
+      src="${link.href}"
+      frameborder="0"></iframe>
+      ${JSON.stringify(link.href)}
+  `;
+
+  e.preventDefault();
+}
+
+function makestatic(/** @type {Event} */ e) {
+  document.getElementById('top').innerHTML = `
+    <img src="blessedsacrament.png" style="max-width: 100%; max-height: 100%; aspect-ratio: 496 / 279;">
+  `;
+
+  e.preventDefault();
+}
